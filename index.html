@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatroom</title>
+    <link rel="shortcut icon" href="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
+    
+    <!--[if IE]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div id="app">
+        <div class="container-fluid">
+        <div class="col-md-2 userlist">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-user"></span> В сети ({{ connectedUsers.length }})
+            </div>
+            <ul class="chat">
+                <li v-for="user in connectedUsers">
+                    {{ user }}&nbsp;<span v-if="userIsTyping(user)" class="glyphicon glyphicon-pencil">..</span>
+                </li>
+
+
+            </ul>
+        </div>
+        <div class="col-md-10">
+            <div id="livechat-container">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-comment"></span>&nbsp;Окно сообщений
+                    </div>
+                    <div class="panel-body">
+                        <ul class="chat" id="messages">
+                            <li v-for="message in messages" class="left clearfix">
+                                <div v-if="message.type == 'info'" class="info">
+                                    {{ message.msg }}
+                                </div>
+                                <div v-if="message.type == 'chat'">
+                                    <span class="chat-img pull-left">
+                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                        </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">{{ message.user }}</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>&nbsp;{{ message.timestamp }}</small>
+                                        </div>
+                                        <p>
+                                            {{ message.text }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="panel-footer">
+                        <form @submit.prevent="send">
+                            <input v-model="message.text" v-on:keyup="usersAreTyping" v-on:keyup.13="stoppedTyping('13')" v-on:keyup.8="stoppedTyping('8')" type="text" class="form-control input-lg" placeholder="Введите свое сообщение" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ru.js"></script>
+<script src="client.js"></script>
+
+</body>
+</html>
